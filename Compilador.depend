@@ -1,0 +1,13 @@
+# depslib dependency file v1.0
+1508557544 source:c:\users\erics\onedrive\documents\compila\nova pasta\compilador\analex.c
+	"analex.h"
+
+1508557811 c:\users\erics\onedrive\documents\compila\nova pasta\compilador\analex.h
+	<stdio.h>
+	<stdlib.h>
+
+1508556504 source:c:\users\erics\onedrive\documents\compila\nova pasta\compilador\main.c
+	<stdio.h>
+	<stdlib.h>
+	"analex.h"
+

@@ -1,0 +1,31 @@
+inteiro c, b;
+semretorno a(semparam){
+    se(c==b){
+        c = 1;
+        b = 2;
+    }
+}
+
+inteiro main(semparam){}
+
+/*int a, b, c;
+
+float x;
+
+x = 3.;
+
+char d;
+
+char e[5];
+
+d = 'a';
+
+a = 1;
+
+b = 2;
+
+if (a == b) {
+  e = "teste";
+}
+
+c = a + b;*/
