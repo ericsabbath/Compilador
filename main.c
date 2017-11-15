@@ -14,12 +14,12 @@ int main(int argc, char *argv[])
     arquivo();
 
     token tk;
-
+/*
     while(1)
     {
       tk = analex();
       imprime(tk);
-    }
+    } */
 
     prog();
     system("PAUSE");

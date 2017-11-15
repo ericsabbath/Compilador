@@ -18,14 +18,14 @@
 // Palavras reservadas
 
 enum {
-    inteiro, booleano, caracter, real, para, se, senao, retorne, semparam, semretorno, enquanto, fim
+    inteiro, booleano, caracter, real, para, se, senao, retorne, semparam, semretorno, enquanto, fim, EXTERN
 };
 
 char TabPR[TAM_L_TAB_PR][TAM_C_TAB_PR];
 
 // Sinais
 enum {
-    abrechave, abrecolchete, abreparente, fechachave, fechacolchete, fechaparentese,
+    abrechave, abrecolchete, abreparentese, fechachave, fechacolchete, fechaparentese,
 	soma, subtracao, multiplicacao, divisao,
 	atribui, ecomercial, e , ou,
 	igual, diferente, maiorigual, menorigual, maior, menor,

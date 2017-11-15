@@ -11,3 +11,21 @@
 	<stdlib.h>
 	"analex.h"
 
+1510711102 source:c:\users\erics\onedrive\documents\compila\compilador 2017.2\analex.c
+	"analex.h"
+
+1510709429 c:\users\erics\onedrive\documents\compila\compilador 2017.2\analex.h
+	<stdio.h>
+	<stdlib.h>
+
+1510711767 source:c:\users\erics\onedrive\documents\compila\compilador 2017.2\main.c
+	<stdio.h>
+	<stdlib.h>
+	"analex.h"
+
+1510724965 source:c:\users\erics\onedrive\documents\compila\compilador 2017.2\anasin.c
+	"anasin.h"
+
+1510722067 c:\users\erics\onedrive\documents\compila\compilador 2017.2\anasin.h
+	"analex.h"
+
