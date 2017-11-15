@@ -23,6 +23,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="analex.h" />
+		<Unit filename="anasin.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="anasin.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
