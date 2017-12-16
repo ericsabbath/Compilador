@@ -96,11 +96,13 @@ void prog() {
     token_atual = analex();
     proximo_token = analex();
     ind_tb = 0;
-    cont_var_g = 0;
+
+    cont_var_global = 0;
     cont_label = 1;
+
     int i;
     int princip = 0;
-    //
+
     while (token_atual.categ != -1) {
         tipo_atual = SEM_TIPO;
         escopo_atual = 0;
@@ -118,6 +120,13 @@ void prog() {
         mensagemErro("Funcao principal nao encontrada");
     }
 
+
+    if(cont_var_global > 0) {
+        printf("DMEM %d\n", cont_var_global);
+    }
+
+    printf("HALT\n");
+
     if (token_atual.categ == -1) {
         mensagem(fimarquivo);
     }
@@ -125,29 +134,12 @@ void prog() {
 
 void decl() {
     if (token_atual.categ == PR) {
-        if (token_atual.codigo == EXTERN) {
-            reconhecePR(EXTERN);
-            if ((token_atual.categ == PR) && (token_atual.codigo == semretorno)) {
-                reconhecePR(semretorno);
-            } else {
-                tipo();
-            }
-            categ_atual = DECL;
-            reconheceID();
-            reconheceSN(abreparentese);
-            tipos_param();
-            reconheceSN(fechaparentese);
-            while ((token_atual.categ == SN) && (token_atual.codigo == virgula)) {
-                reconheceSN(virgula);
-                reconheceID();
-                reconheceSN(abreparentese);
-                tipos_param();
-                reconheceSN(fechaparentese);
-            }
-            reconheceSN(pontovirgula);
-        } else {
-            if ((token_atual.categ == PR) && (token_atual.codigo == semretorno)) {
-                reconhecePR(semretorno);
+            if ((token_atual.categ == PR) && ((token_atual.codigo == semretorno)||(token_atual.codigo == prototipo))) {
+                if (token_atual.codigo == semretorno) {
+                    reconhecePR(semretorno);
+                } else if (token_atual.codigo == prototipo) {
+                    reconhecePR(prototipo);
+                }
                 reconheceID();
                 reconheceSN(abreparentese);
                 tipos_param();
@@ -155,7 +147,12 @@ void decl() {
                 if ((token_atual.categ == SN)
                         && (token_atual.codigo == abrechave)) {
                     categ_atual = FUNC;
+
+
+                    lx = gera_label();
+                    printf("LABEL L%d\n", lx);
                     //
+
                     updateID();
                     reconheceSN(abrechave);
                     while ((token_atual.categ == PR)
@@ -184,6 +181,8 @@ void decl() {
                             }
                         }
                         reconheceSN(pontovirgula);
+
+
                     }
                     while (((token_atual.categ == PR)
                             && ((token_atual.codigo == se)
@@ -194,6 +193,7 @@ void decl() {
                             || ((token_atual.categ == SN)
                             && ((token_atual.codigo == pontovirgula)
                             || (token_atual.codigo == abrechave)))) {
+
                         cmd();
                     }
                     reconheceSN(fechachave);
@@ -209,6 +209,7 @@ void decl() {
                         reconheceSN(fechaparentese);
                     }
                     reconheceSN(pontovirgula);
+
                 }
             } else {
                 tipo();
@@ -279,7 +280,7 @@ void decl() {
                 } else {
                     categ_atual = VAR_GLOBAL;
                     updateID();
-                    cont_var_g++;
+                    cont_var_global++;
                     if ((token_atual.categ == SN)
                             && (token_atual.codigo == abrecolchete)) {
                         reconheceSN(abrecolchete);
@@ -290,7 +291,7 @@ void decl() {
                             && (token_atual.codigo == virgula)) {
                         reconheceSN(virgula);
                         reconheceID();
-                        cont_var_g++;
+                        cont_var_global++;
                         if ((token_atual.categ == SN)
                                 && (token_atual.codigo == abrecolchete)) {
                             reconheceSN(abrecolchete);
@@ -300,9 +301,13 @@ void decl() {
                     }
                     reconheceSN(pontovirgula);
                     //
+
+
+                    printf("AMEM %d\n", cont_var_global);
+
                 }
             }
-        }
+       // }
     } else {
         mensagemErro("Declaracao esperada");
     }
@@ -382,17 +387,38 @@ void cmd() {
             reconheceSN(abreparentese);
             expr();
             reconheceSN(fechaparentese);
+
+            lx = gera_label();
+
+            printf("GOFALSE L%d\n", lx);
+
             cmd();
+
+            printf("LABEL L%d\n", lx);
+
             if ((token_atual.categ == PR) && (token_atual.codigo == senao)) {
                 reconhecePR(senao);
                 cmd();
             }
         } else if (token_atual.codigo == enquanto) {
             reconhecePR(enquanto);
+
+            lx = gera_label();
+            printf("LABEL L%d\n", lx);
+
             reconheceSN(abreparentese);
             expr();
+
             reconheceSN(fechaparentese);
+
+            lx2 = gera_label();
+            printf("GOFALSE L%d\n", lx2);
+
             cmd();
+
+            printf("GOTO L%d\n", lx);
+            printf("LABEL L%d\n", lx2);
+
         } else if (token_atual.codigo == para) {
             reconhecePR(para);
             reconheceSN(abreparentese);
@@ -400,22 +426,44 @@ void cmd() {
                 atrib();
             }
             reconheceSN(pontovirgula);
+
+            lx = gera_label();
+            printf("LABEL L%d\n", lx);
+
             if ((token_atual.categ == ID) || ((token_atual.categ == SN)
                     && ((token_atual.codigo == soma)
                     || (token_atual.codigo == subtracao)))) {
                 expr();
             }
+
             reconheceSN(pontovirgula);
+
+            lx2 = gera_label();
+            printf("GOFALSE L%d\n", lx2);
+
+            lx3 = gera_label();
+            printf("GOTO L%d\n", lx3);
+
+            lx4 = gera_label();
+            printf("LABEL L%d\n", lx4);
+
             if (token_atual.categ == ID) {
                 atrib();
             }
+
+            printf("GOTO L%d\n", lx);
+            printf("LABEL L%d\n", lx3);
+
             reconheceSN(fechaparentese);
             cmd();
+
+            printf("GOTO L%d\n", lx4);
+            printf("LABEL L%d\n", lx2);
+
         } else if (token_atual.codigo == retorne) {
             reconhecePR(retorne);
             if ((token_atual.categ == ID) || ((token_atual.categ == SN)
-                    && ((token_atual.codigo == soma)
-                    || (token_atual.codigo == subtracao)))) {
+                    && ((token_atual.codigo == soma) || (token_atual.codigo == subtracao)))) {
                 expr();
             }
             reconheceSN(pontovirgula);
@@ -462,33 +510,42 @@ void atrib() {
     if (token_atual.categ == ID) {
         strcpy(lexema, token_atual.lexema);
     }
+
     reconheceID();
+
     if ((token_atual.categ == SN) & (token_atual.codigo == abrecolchete)) {
         reconheceSN(abrecolchete);
         expr();
         reconheceSN(fechacolchete);
     }
+
     reconheceSN(atribui);
     expr();
+
+    printf("STOR %s\n", lexema);
 }
 
 void expr() {
     expr_simp();
     if ((token_atual.categ == SN) &&
-              ((token_atual.codigo == igual)
-            || (token_atual.codigo == diferente)
-            || (token_atual.codigo == menorigual)
-            || (token_atual.codigo == menor)
-            || (token_atual.codigo == maiorigual)
-            || (token_atual.codigo == maior))) {
+              ((token_atual.codigo == igual) || (token_atual.codigo == diferente)
+            || (token_atual.codigo == menorigual) || (token_atual.codigo == menor)
+            || (token_atual.codigo == maiorigual) || (token_atual.codigo == maior))) {
+
         op_rel();
+
         expr_simp();
+
+
+
     }
 }
 
 void expr_simp() {
     if ((token_atual.categ == SN) && ((token_atual.codigo == soma)
             || (token_atual.codigo == subtracao))) {
+
+
         reconheceSN(token_atual.codigo);
     }
     termo();
@@ -501,6 +558,8 @@ void expr_simp() {
         if ((token_atual.categ == SN) && ((token_atual.codigo == soma)
                 || (token_atual.codigo == subtracao)
                 || (token_atual.codigo == ou))) {
+
+            printf("%s\n", ((token_atual.codigo==soma) ? "ADD \n" : "SUB \n"));
             reconheceSN(token_atual.codigo);
         }
         termo();
@@ -522,6 +581,9 @@ void termo() {
         if ((token_atual.categ == SN) && ((token_atual.codigo == multiplicacao)
                 || (token_atual.codigo == divisao)
                 || (token_atual.codigo == e))) {
+
+            printf("%s\n", ((token_atual.codigo==multiplicacao) ? "MUL \n" : "DIV \n"));
+
             reconheceSN(token_atual.codigo);
         }
         fator();
@@ -564,8 +626,14 @@ void fator() {
             fator();
         }
     } else if (token_atual.categ == CT_I) {
+
+        printf("PUSH %d\n", token_atual.valor_int);
+
         reconhece_intcon();
     } else if (token_atual.categ == CT_R) {
+
+        printf("PUSH %f\n", token_atual.valor_real);
+
         reconhece_realcon();
     } else if (token_atual.categ == CT_C) {
         reconhece_charcon();
@@ -583,7 +651,7 @@ void op_rel() {
             || (token_atual.codigo == maior))) {
         reconheceSN(token_atual.codigo);
     } else {
-        mensagemErro("Operador de relacao esperado");
+        mensagemErro("Operador relacional esperado");
     }
 }
 
@@ -646,4 +714,7 @@ void updateID() {
         }
     }
     tab_sb[j].categ = categ_atual;
+}
+int gera_label() {
+    return cont_label++;
 }

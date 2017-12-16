@@ -3,7 +3,7 @@
 void TabelaPR() {
     int i = 0;
     char PR[TAM_L_TAB_PR][TAM_C_TAB_PR] = {"inteiro", "booleano", "caracter",
-        "real", "para", "se", "senao", "retorne", "semparam", "semretorno","enquanto", "fim", "extern"};
+        "real", "para", "se", "senao", "retorne", "semparam", "semretorno","enquanto", "fim", "prototipo"};
 
     for (i = 0; i <= TAM_L_TAB_PR; i++)
         strcpy(TabPR[i], PR[i]);
@@ -105,7 +105,6 @@ token analex() {
                     estado = 3;
                 }
 				else if (c == '&') {
-
 				    estado = 4;
                 }
 				else if (c == '!') {

@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define TAM_L_TAB_PR 12
-#define TAM_C_TAB_PR 12
+#define TAM_L_TAB_PR 14
+#define TAM_C_TAB_PR 14
 #define TAM_L_TAB_LT 1000
 #define TAM_C_TAB_LT 11
 #define TAM_L_TAB_SN 23
@@ -18,7 +18,7 @@
 // Palavras reservadas
 
 enum {
-    inteiro, booleano, caracter, real, para, se, senao, retorne, semparam, semretorno, enquanto, fim, EXTERN
+    inteiro, booleano, caracter, real, para, se, senao, retorne, semparam, semretorno, enquanto, fim, prototipo
 };
 
 char TabPR[TAM_L_TAB_PR][TAM_C_TAB_PR];

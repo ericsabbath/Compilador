@@ -67,6 +67,7 @@ void prog();
 void decl();
 void tipo();
 void tipos_param();
+void tipos_p_opc();
 void cmd();
 void atrib();
 void expr();
@@ -78,7 +79,8 @@ void op_rel();
 int insereID(char *);
 void updateID();
 
-int cont_var_g;
-int cont_label;
 int gera_label();
 int lx, lx2, lx3, lx4;
+int cont_var_global;
+int cont_label;
+
